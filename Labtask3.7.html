@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LAB 3.7 - User ID and Picture</title>
+</head>
+<body>
+  <form onsubmit="return validateUser()" enctype="multipart/form-data">
+    User ID: <input type="number" id="uid"><br>
+    Picture: <input type="file" id="pic" accept="image/*"><br><br>
+    <span id="msg"></span><br><br>
+    <input type="submit" value="Validate">
+  </form>
+
+  <script src="LAB 3.7.js"></script>
+</body>
+</html>

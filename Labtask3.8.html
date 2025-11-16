@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LAB 3.8 - Combined Validation</title>
+</head>
+<body>
+  <form onsubmit="return validateAll()">
+    Name: <input type="text" id="name"><br>
+    Email: <input type="text" id="email"><br>
+    Options: 
+    <input type="checkbox" name="opt" value="A"> A
+    <input type="checkbox" name="opt" value="B"> B<br>
+    Date: 
+    <input type="number" id="day" placeholder="dd">
+    <input type="number" id="month" placeholder="mm">
+    <input type="number" id="year" placeholder="yyyy"><br><br>
+    <span id="msg"></span><br><br>
+    <input type="submit" value="Validate">
+  </form>
+
+  <script src="LAB 3.8.js"></script>
+</body>
+</html>
