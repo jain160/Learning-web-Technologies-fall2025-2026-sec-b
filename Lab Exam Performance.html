@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynamic Registration Form</title>
+<style>
+    body{ font-family: Arial; margin:20px;}
+    .box{ border:1px solid #555; padding:15px; width:450px; margin-bottom:20px;}
+    label{ display:block; margin-top:10px;}
+    input,select{ padding:6px; width:95%; }
+    .field-row{ margin-bottom: 10px; }
+    .error{ color:red; font-size:13px; }
+    #infoBox{ border:1px solid #333; padding:10px; width:450px; display:none; }
+</style>
+</head>
+<body>
+ 
+<h2>Add Field</h2>
+<div class="box">
+<label>Field Name:</label>
+<input type="text" id="fieldName">
+ 
+    <label>Field Type:</label>
+<select id="fieldType">
+<option value="text">Text</option>
+<option value="number">Number</option>
+<option value="date">Date of Birth</option>
+<option value="dropdown">Dropdown</option>
+<option value="checkbox">Checkbox</option>
+<option value="blood">Blood Group</option>
+</select>
+ 
+    <button onclick="addField()">OK</button>
+</div>
+ 
+<h2>Registration Form</h2>
+<form id="regForm" class="box"></form>
+ 
+<button onclick="submitForm()">Submit</button>
+ 
+<h2>Information</h2>
+<div id="infoBox"></div>
+ 
+<script>
+let form = document.getElementById("regForm");
+ 
+// predefined blood groups
+const bloodGroups = ["A+","A-","B+","B-","O+","O-","AB+","AB-"];
+ 
+function addField() {
+    let name = document.getElementById("fieldName").value.trim();
+    let type = document.getElementById("fieldType").value;
+ 
+    if (name === "") {
+        alert("Please enter field name!");
+        return;
+    }
+ 
+    let div = document.createElement("div");
+    div.className = "field-row";
+    div.innerHTML = `<label>${name}</label>`;
+ 
+    // Create input based on type
+    if (type === "text") {
+        div.innerHTML += `<input type='text' name='${name}' data-type='text'><span class='error'></span>`;
+    }
+    else if (type === "number") {
+        div.innerHTML += `<input type='number' name='${name}' data-type='number'><span class='error'></span>`;
+    }
+    else if (type === "date") {
+        div.innerHTML += `<input type='date' name='${name}' data-type='date'><span class='error'></span>`;
+    }
+    else if (type === "checkbox") {
+        div.innerHTML += `
+<input type='checkbox' name='${name}' data-type='checkbox'> <span>(Check if Yes)</span>
+<span class='error'></span>`;
+    }
+    else if (type === "dropdown") {
+        div.innerHTML += `
+<select name='${name}' data-type='dropdown'>
+<option value="">Select Option</option>
+<option>Option 1</option>
+<option>Option 2</option>
+<option>Option 3</option>
+</select>
+<span class='error'></span>`;
+    }
+    else if (type === "blood") {
+        let options = bloodGroups.map(g => `<option>${g}</option>`).join("");
+        div.innerHTML += `
+<select name='${name}' data-type='blood'>
+<option value="">Select Blood Group</option>
+                ${options}
+</select>
+<span class='error'></span>`;
+    }
+ 
+    form.appendChild(div);
+ 
+    document.getElementById("fieldName").value = "";
+}
+ 
+function submitForm() {
+    let inputs = form.querySelectorAll("input,select");
+    let valid = true;
+    let data = {};
+ 
+    inputs.forEach(el => {
+        let fieldName = el.name;
+        let type = el.dataset.type;
+        let errorBox = el.nextElementSibling;
+ 
+        errorBox.innerHTML = "";
+ 
+        if (type !== "checkbox" && el.value.trim() === "") {
+            errorBox.innerHTML = "This field is required!";
+            valid = false;
+        }
+ 
+        // validation rules
+        if (type === "number" && el.value !== "" && isNaN(el.value)) {
+            errorBox.innerHTML = "Invalid number!";
+            valid = false;
+        }
+ 
+        if (valid) {
+            if (type === "checkbox") {
+                data[fieldName] = el.checked ? "Yes" : "No";
+            } else {
+                data[fieldName] = el.value;
+            }
+        }
+    });
+ 
+    if (!valid) return;
+ 
+    showInfo(data);
+}
+ 
+function showInfo(data) {
+    let box = document.getElementById("infoBox");
+    box.innerHTML = "";
+ 
+    for (let key in data) {
+        box.innerHTML += `<b>${key}</b>: ${data[key]} <br>`;
+    }
+ 
+    box.style.display = "block";
+}
+</script>
+ 
+</body>
+</html>
